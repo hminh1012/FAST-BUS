@@ -1,0 +1,69 @@
+{
+    "attendance_logs": {
+        "log_id_timestamp_1": {
+            "action": "check_in",
+            "bus_id": "bus_01",
+            "date_time": "2025-11-30 07:00:00",
+            "location": {
+                "lat": 16.073682,
+                "lng": 108.149718
+            },
+            "student_id": "102210001",
+            "timestamp": 1732960000000
+        },
+        "log_id_timestamp_2": {
+            "action": "check_out",
+            "bus_id": "bus_01",
+            "date_time": "2025-11-30 07:30:00",
+            "location": {
+                "lat": 16.047165,
+                "lng": 108.206835
+            },
+            "student_id": "102210002",
+            "timestamp": 1732961800000
+        }
+    },
+    "buses": {
+        "bus_01": {
+            "capacity": 45,
+            "driver_name": "Lê Văn Tài",
+            "driver_phone": "+84912345678",
+            "plate_number": "43B-123.45"
+        },
+        "bus_02": {
+            "capacity": 29,
+            "driver_name": "Phạm Văn Xế",
+            "driver_phone": "+84987654321",
+            "plate_number": "43B-678.90"
+        }
+    },
+    "live_trips": {
+        "bus_01": {
+            "lat": 16.05,
+            "lng": 108.21,
+            "current_status": "moving",
+            "last_updated": 1732962000000,
+            "passenger_count": 15
+        }
+    },
+    "users": {
+        "102210001": {
+            "avatar_url": "https://example.com/avatar1.jpg",
+            "class": "19DT1",
+            "name": "Nguyễn Văn A",
+            "parent_phone": "+84905123456",
+            "rfid_card_id": "A3 B2 C1 D4",
+            "student_id": "102210001",
+            "cccd": "048201000123"
+        },
+        "102210002": {
+            "avatar_url": "https://example.com/avatar2.jpg",
+            "class": "20DT2",
+            "name": "Trần Thị B",
+            "parent_phone": "+84905987654",
+            "rfid_card_id": "E1 F2 G3 H4",
+            "student_id": "102210002",
+            "cccd": "048201000456"
+        }
+    }
+}

@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
 import { auth } from './firebase';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Firebase Auth User (System)
   const [loading, setLoading] = useState(true);
+  const [currentStudent, setCurrentStudent] = useState(null); // App User (Student)
 
   useEffect(() => {
+    // Check for saved student session
+    const savedStudent = localStorage.getItem('currentStudent');
+    if (savedStudent) {
+      setCurrentStudent(JSON.parse(savedStudent));
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -32,6 +40,16 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  const handleStudentLogin = (student) => {
+    setCurrentStudent(student);
+    localStorage.setItem('currentStudent', JSON.stringify(student));
+  };
+
+  const handleStudentLogout = () => {
+    setCurrentStudent(null);
+    localStorage.removeItem('currentStudent');
+  };
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">Loading...</div>;
   }
@@ -39,12 +57,24 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-white text-gray-900 font-sans flex flex-col">
-        <Navbar user={user} />
+        {/* Only show Navbar if not on Login page (optional, but cleaner) */}
+        <Navbar user={user} student={currentStudent} onLogout={handleStudentLogout} />
 
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/login"
+              element={
+                currentStudent ? <Navigate to="/dashboard" /> : <Login onLogin={handleStudentLogin} />
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                currentStudent ? <Dashboard currentStudent={currentStudent} /> : <Navigate to="/login" />
+              }
+            />
             {/* Add more routes as needed */}
             <Route path="*" element={<LandingPage />} />
           </Routes>

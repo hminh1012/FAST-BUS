@@ -1,7 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { LogOut, User } from 'lucide-react';
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, student, onLogout }) => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        onLogout();
+        navigate('/');
+    };
+
     return (
         <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -18,15 +26,30 @@ const Navbar = ({ user }) => {
                     <Link to="/admissions" className="hover:text-[#8B0000] transition-colors">Admissions</Link>
                     <Link to="/training" className="hover:text-[#8B0000] transition-colors">Training</Link>
                     <Link to="/research" className="hover:text-[#8B0000] transition-colors">Research</Link>
-                    <Link to="/dashboard" className="bg-[#8B0000] text-white px-4 py-2 rounded hover:bg-[#600000] transition-colors">
-                        Dashboard
-                    </Link>
+                    {student && (
+                        <Link to="/dashboard" className="bg-[#8B0000] text-white px-4 py-2 rounded hover:bg-[#600000] transition-colors">
+                            Dashboard
+                        </Link>
+                    )}
                 </nav>
 
                 <div className="flex items-center gap-4">
-                    {user ? (
-                        <div className="h-10 w-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-[#8B0000] font-bold text-lg">
-                            {user.email?.charAt(0).toUpperCase() || 'A'}
+                    {student ? (
+                        <div className="flex items-center gap-3">
+                            <div className="flex flex-col items-end">
+                                <span className="text-sm font-bold text-gray-900">{student.name}</span>
+                                <span className="text-xs text-gray-500">{student.id}</span>
+                            </div>
+                            <div className="h-10 w-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-[#8B0000] font-bold text-lg">
+                                <User size={20} />
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="ml-2 p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
+                                title="Logout"
+                            >
+                                <LogOut size={20} />
+                            </button>
                         </div>
                     ) : (
                         <Link to="/login" className="text-lg font-medium text-gray-700 hover:text-[#8B0000]">Login</Link>
